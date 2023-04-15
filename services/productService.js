@@ -1,6 +1,9 @@
 const getAllproductsService = async (req, res) => {
   try {
-  } catch (error) {}
+    return true;
+  } catch (error) {
+    return false;
+  }
 };
 
 module.exports = { getAllproductsService };
