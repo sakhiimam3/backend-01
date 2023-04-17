@@ -1,5 +1,32 @@
-const { getAllproductsService } = require("../services/productService.js");
+const {
+  getAllproductsService,
+  createProductService,
+} = require("../services/productService.js");
 const responses = require("../constant/responses.js");
+const productSchema = require("../model/productSchema.js");
+
+// create product
+const createProductController = async (req, res) => {
+  try {
+    const product = await productSchema.create(req.body);
+    if (!product) {
+      res.send(
+        responses.genericResponse(500, false, null, {
+          message: responses.FAILED,
+        })
+      );
+    } else {
+      res.send(
+        responses.genericResponse(200, true, {
+          message: responses.SUCCESS,
+          data: product,
+        })
+      );
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const getAllproducts = async (req, res) => {
   const data = await getAllproductsService();
@@ -21,11 +48,7 @@ const getAllproducts = async (req, res) => {
       return;
     }
   } catch (error) {
-    res.send(
-      responses.genericResponse(400, false, null, {
-        message: responses.NETWORK_ERROR,
-      })
-    );
+    console.log(error);
   }
 };
-module.exports = { getAllproducts };
+module.exports = { getAllproducts, createProductController };

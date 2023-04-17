@@ -1,3 +1,4 @@
+const productSchema = require("../model/productSchema");
 const getAllproductsService = async (req, res) => {
   try {
     return true;
