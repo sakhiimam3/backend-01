@@ -15,7 +15,8 @@ module.exports = {
   CLIENT_ACCEPTED: "Your account has been activated.",
   LOGIN_SUCCESS: "logged in successfully ",
   SUCCESS_UPDATE: "successfully updated!",
-  SUCCESS_DELETE: "successfully deleted!",
+  SUCCESS_DELETE: "Product successfully deleted!",
+  PRODUCT_NOT_FOUND:"Product not found",
   PROJECT_ADDED: "Add project successfully",
   PROJECT_UPDATED: "Project updated successfully",
   TASK_SUCCESS: "Task created successfully ",
@@ -24,6 +25,7 @@ module.exports = {
   TOKEN_EXPIRED: "your token has expired",
   UPLOAD_IMAGE: "uplaod image succesfully",
   NETWORK_ERROR: "Network error !",
+  
   genericResponse: (status, success, data, error, message) => {
     return {
       status: {
