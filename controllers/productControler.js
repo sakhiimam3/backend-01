@@ -7,6 +7,7 @@ const ErrorHandler = require("../utils/errorHandeler.js");
 
 // create product 
 const createProductController = catchAynscErros(async (req, res,next) => {
+   req.body.user=req.user.id
     const product = await productSchema.create(req.body);
     if (!product) {
       return next(new ErrorHandler("Product not  created ", 404));
@@ -24,8 +25,11 @@ const createProductController = catchAynscErros(async (req, res,next) => {
 
 // all  product
 const getAllproducts = catchAynscErros(async (req, res,next) => {
-  const apiFeature = new ApiFeatures(productSchema.find(),req.query).search()
-  console.log("abaaa",apiFeature)
+  const resultPerPage=5
+  const productsCount = await productSchema.countDocuments();
+  const apiFeature = new ApiFeatures(productSchema.find(),req.query).search().filter().pagination(resultPerPage)
+
+
   let data = await apiFeature.query;
     if (!data) {
       res.send(
@@ -39,6 +43,7 @@ const getAllproducts = catchAynscErros(async (req, res,next) => {
         responses.genericResponse(200, true, {
           message: responses.SUCCESS,
           data: data,
+          productsCount: productsCount,
         })
       );
     
