@@ -1,5 +1,5 @@
 const ErrorHander = require("../utils/errorHandeler");
-const catchAsyncErrors = require("./catchAynscErros");
+const catchAsyncErrors = require("./catchAsyncErrors");
 const jwt = require("jsonwebtoken");
 const User = require("../model/userSchema");
 
@@ -13,7 +13,6 @@ exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
  
    req.user = await User.findById(decodedData.id);
    let data=await User.findById(decodedData.id);
-   console.log(data,"data123")
 
    next();
 });
