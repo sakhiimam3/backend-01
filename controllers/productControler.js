@@ -9,17 +9,10 @@ const ErrorHandler = require("../utils/errorHandeler.js");
 const createProductController = catchAsyncErrors(async (req, res,next) => {
    req.body.user=req.user.id
     const product = await productSchema.create(req.body);
-    if (!product) {
-      return next(new ErrorHandler("Product not  created ", 404));
-    
-    } else {
-      res.send(
-        responses.genericResponse(200, true, {
-          message: responses.SUCCESS,
-          data: product,
-        })
-      );
-    }
+    res.status(201).json({
+      success: true,
+      product,
+    });
   });
 
 
@@ -28,8 +21,6 @@ const getAllproducts = catchAsyncErrors(async (req, res,next) => {
   const resultPerPage=5
   const productsCount = await productSchema.countDocuments();
   const apiFeature = new ApiFeatures(productSchema.find(),req.query).search().filter().pagination(resultPerPage)
-
-
   let data = await apiFeature.query;
     if (!data) {
       res.send(
@@ -89,21 +80,27 @@ const updateProduct = catchAsyncErrors (async (req, res,next) => {
 
 
 // Delete product 
-const deleteProduct =  catchAsyncErrors( async (req, res,next) => {
-  const data = await productSchema.findByIdAndDelete(req.params.id);
-    if (!data) {
-      return next(new ErrorHandler("Product not found", 404));
-      
-    } else {
-      res.send(
-        responses.genericResponse(200, true, {
-          message: responses.SUCCESS_DELETE,
+const deleteProduct = catchAsyncErrors(async (req, res, next) => {
+  const product = await productSchema.findById(req.params.id);
 
-        })
-      );
-    }
-  
+  if (!product) {
+    return next(new ErrorHandler("Product not found", 404));
+  }
+
+  // Deleting Images From Cloudinary
+  // for (let i = 0; i < product.images.length; i++) {
+  //   await cloudinary.v2.uploader.destroy(product.images[i].public_id);
+  // }
+
+  await productSchema.findByIdAndDelete(req.params.id);
+
+  res.status(200).json({
+    success: true,
+    message: "Product Delete Successfully",
+  });
 });
+
+
 
 // product detail
 
